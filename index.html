@@ -22,593 +22,214 @@
     <script src="/three.min.js"></script>
     <script src="/feather.min.js"></script>
     <link rel="stylesheet" href="/css2.css">
-<style>
+    <style>
+        :root {
+            --brand-color: #626ef6;
+            --accent-color: #f89819;
+            --bg-deep: #0c0d11;
+            --bg-card: #16181d;
+            --text-main: #e2e8f0;
+            --text-dim: #94a3b8;
+        }
+
         body {
             font-family: 'Inter', sans-serif;
-            background: linear-gradient(to bottom, #1a1f2e 0%, #13151c 100%);
+            background-color: var(--bg-deep);
+            color: var(--text-main);
+            margin: 0;
+            overflow-x: hidden;
         }
-.glow-text {
-            text-shadow: 0 0 10px rgba(255,255,255,0.3);
+
+        .neon-glow {
+            box-shadow: 0 0 20px rgba(98, 110, 246, 0.2);
         }
-        .neon-border {
-            border: 1px solid rgba(255,255,255,0.1);
-            box-shadow: 0 0 15px rgba(255,255,255,0.05);
+
+        .game-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+            border-color: var(--brand-color);
         }
-        .gradient-text {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 4px;
         }
-        .content-block {
-            background: linear-gradient(135deg, #2a2f3d 0%, #212530 100%);
-            border-radius: 1rem;
-            padding: 2rem;
-            margin: 2rem 0;
-            border: 1px solid rgba(255,255,255,0.1);
-            box-shadow: 0 0 20px rgba(255,255,255,0.05);
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: var(--brand-color);
+            border-radius: 10px;
         }
-        .content-block h1 {
-            font-size: 2.5rem;
-            font-weight: 700;
-            margin-bottom: 1.5rem;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+        .about-platform {
+            line-height: 1.8;
+            font-size: 15px;
+            color: var(--text-dim);
         }
-        .content-block h2 {
-            font-size: 1.75rem;
-            font-weight: 600;
-            margin: 1.5rem 0 1rem 0;
-            color: #f89819;
-        }
-        .content-block h3 {
-            font-size: 1.5rem;
-            font-weight: 500;
-            margin: 1.25rem 0 0.75rem 0;
-            color: #626ef6;
-        }
-        .content-block p {
-            font-size: 1.125rem;
-            line-height: 1.7;
+        .about-platform h1, .about-platform h2 {
+            color: var(--text-main);
+            margin-top: 2rem;
             margin-bottom: 1rem;
-            color: #e2e8f0;
+            font-weight: 800;
         }
-                @media (max-width: 767px) {
-            #jackpot-carousel {
-                display: flex;
-                width: 300%;
-            }
-            #jackpot-carousel > div {
-                min-width: 33.33%;
-                padding: 0 0.5rem;
-            }
+        .about-platform p {
+            margin-bottom: 1.5rem;
+            text-align: justify;
         }
-</style>
+        .pulse-btn {
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(98, 110, 246, 0.4); }
+            70% { box-shadow: 0 0 0 15px rgba(98, 110, 246, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(98, 110, 246, 0); }
+        }
+    </style>
 </head>
-<body class="min-h-screen text-white">
-    <header class="relative z-10 py-4">
-        <div class="w-full md:w-4/5 mx-auto bg-[#212530] rounded-full px-4 md:px-6 py-3 flex items-center justify-between">
+</head>
+<body class="custom-scrollbar">
+    <header class="sticky top-0 z-50 py-3 px-4 bg-[#16181d]/90 backdrop-blur-md border-b border-white/5">
+        <div class="max-w-7xl mx-auto flex items-center justify-between">
             <div class="flex items-center space-x-4">
-                <button class="text-white p-2 md:block hidden">
-                    <i data-feather="menu"></i>
-                </button>
-                <img src="images/logo.png" alt="Logo" class="h-8 md:h-10">
+                <img src="images/logo.png" alt="Eva Casino Logo" class="h-8 md:h-11">
             </div>
-            <div class="flex-1 max-w-md mx-4 hidden md:block">
-                <div class="bg-[#2a2f3d] rounded-full px-4 py-2 flex items-center">
-                    <i data-feather="search" class="text-gray-400 mr-2 w-4 h-4"></i>
-                    <input type="text" placeholder="Поиск игр" class="bg-transparent w-full text-white placeholder-gray-400 focus:outline-none">
-        </div>
-    </div>
-<div class="flex items-center space-x-3">
-                <a href="javascript:void(0);" class="bg-[#626ef6] text-white px-4 py-2 rounded-full flex items-center space-x-2 hover:bg-[#5a65e0] transition-colors md:px-6">
-                    <i data-feather="log-in" class="w-4 h-4"></i>
-                    <span class="text-sm md:text-base">Вход</span>
-                </a>
-                <a href="javascript:void(0);" class="bg-[#f89819] text-white px-4 py-2 rounded-full flex items-center space-x-2 hover:bg-[#e68916] transition-colors md:px-6">
-                    <i data-feather="user-plus" class="w-4 h-4"></i>
-                    <span class="text-sm md:text-base">Регистрация</span>
-                </a>
-           </div>
+            
+            <div class="hidden lg:flex space-x-6 text-sm font-medium">
+                <a href="#games" class="hover:text-brand-color transition">Слоты</a>
+                <a href="#games" class="hover:text-brand-color transition">Live-казино</a>
+                <a href="#seo-info" class="hover:text-brand-color transition">Обзор</a>
+            </div>
+
+            <div class="flex items-center space-x-3">
+                <button onclick="fireRedirect()" class="text-sm font-bold bg-white/5 hover:bg-white/10 px-5 py-2.5 rounded-full transition border border-white/10">Вход</button>
+                <button onclick="fireRedirect()" class="pulse-btn text-sm font-bold bg-gradient-to-r from-[#626ef6] to-[#5a65e0] text-white px-6 py-2.5 rounded-full transition shadow-lg shadow-blue-900/20">Регистрация</button>
+            </div>
         </div>
     </header>
-    <div class="relative z-10 mt-2 w-full md:w-4/5 mx-auto px-4">
-<div class="bg-cover bg-center rounded-2xl overflow-hidden" style="background-image: url('images/header-evas.webp');">
-<div class="bg-black bg-opacity-40 py-16 px-8 text-center">
-                <h2 class="text-5xl font-bold mb-4 glow-text">Welcome package</h2>
-                <p class="text-2xl mb-6">до <span class="text-yellow-300 font-bold">300%</span> + <span class="text-yellow-300 font-bold">900</span> free spins</p>
-<a href="javascript:void(0);" class="bg-[#626ef6] text-white px-8 py-3 rounded-full text-lg font-semibold hover:bg-[#5a65e0] transition-colors">
-                    Получить
-                </a>
-            </div>
-        </div>
-    </div>
-    <div class="relative z-10 mt-3 w-full md:w-4/5 mx-auto px-4">
-<div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-            <div class="bg-[#212530] rounded-2xl p-4 neon-border relative overflow-visible" style="box-shadow: 0 0 20px rgba(255, 215, 0, 0.3);">
-                <div class="flex items-center">
-<img src="images/box.webp" 
-                         alt="Wheel of Fortune" 
-                         class="w-20 h-20 -mt-8 -ml-3 z-10 relative">
-                    <span class="text-white font-semibold ml-2 text-sm md:text-base">Подарки от Евы</span>
-                </div>
-            </div>
-            <div class="bg-[#212530] rounded-2xl p-4 neon-border relative overflow-visible" style="box-shadow: 0 0 20px rgba(0, 150, 255, 0.3);">
-                <div class="flex items-center">
-                    <img src="images/wheel.webp" 
-                         alt="Download App" 
-                         class="w-20 h-20 -mt-8 -ml-3 z-10 relative">
-                    <span class="text-white font-semibold ml-2 text-sm md:text-base">Колесо фортуны</span>
-                </div>
-            </div>
-            <div class="bg-[#212530] rounded-2xl p-4 neon-border relative overflow-visible" style="box-shadow: 0 0 20px rgba(50, 205, 50, 0.3);">
-                <div class="flex items-center">
-                    <img src="images/dollars.webp" 
-                         alt="Referral Program" 
-                         class="w-20 h-20 -mt-8 -ml-3 z-10 relative">
-                    <span class="text-white font-semibold ml-2 text-sm md:text-base">Кешбек до 20%</span>
-                </div>
-            </div>
-            <div class="bg-[#212530] rounded-2xl p-4 neon-border relative overflow-visible" style="box-shadow: 0 0 20px rgba(255, 105, 180, 0.3);">
-                <div class="flex items-center">
-                    <img src="images/prize.webp" 
-                         alt="Bonus Store" 
-                         class="w-20 h-20 -mt-8 -ml-3 z-10 relative">
-                    <span class="text-white font-semibold ml-2 text-sm md:text-base">Крупные турниры</span>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="relative z-10 mt-3 w-full md:w-4/5 mx-auto px-4">
-<div class="bg-[#212530] rounded-full px-6 py-3 flex items-center justify-start space-x-8 neon-border overflow-x-auto scrollbar-hide">
-            <a href="javascript:void(0);" class="flex flex-col items-center space-y-1 text-white hover:text-[#626ef6] transition-colors relative group flex-shrink-0">
-                <div class="flex items-center space-x-2">
-<i data-feather="home" class="w-5 h-5"></i>
-                    <span class="font-bold text-lg">Лобби</span>
-                </div>
-                <div class="w-full h-0.5 bg-yellow-600 opacity-0 group-hover:opacity-100 transition-opacity"></div>
-            </a>
-            <a href="javascript:void(0);" class="flex flex-col items-center space-y-1 text-[#626ef6] transition-colors relative group">
-                <div class="flex items-center space-x-2">
-                    <i data-feather="play" class="w-5 h-5"></i>
-                    <span class="font-bold text-lg">Слоты</span>
-                </div>
-                <div class="w-full h-0.5 bg-yellow-600"></div>
-            </a>
-            <a href="javascript:void(0);" class="flex flex-col items-center space-y-1 text-white hover:text-[#626ef6] transition-colors relative group">
-                <div class="flex items-center space-x-2">
-                    <i data-feather="video" class="w-5 h-5"></i>
-                    <span class="font-bold text-lg">Live-казино</span>
-                </div>
-                <div class="w-full h-0.5 bg-yellow-600 opacity-0 group-hover:opacity-100 transition-opacity"></div>
-            </a>
-            <a href="javascript:void(0);" class="flex flex-col items-center space-y-1 text-white hover:text-[#626ef6] transition-colors relative group">
-                <div class="flex items-center space-x-2">
-                    <i data-feather="trending-up" class="w-5 h-5"></i>
-                    <span class="font-bold text-lg">Crash Games</span>
-                </div>
-                <div class="w-full h-0.5 bg-yellow-600 opacity-0 group-hover:opacity-100 transition-opacity"></div>
-            </a>
-            <a href="javascript:void(0);" class="flex flex-col items-center space-y-1 text-white hover:text-[#626ef6] transition-colors relative group">
-                <div class="flex items-center space-x-2">
-                    <i data-feather="grid" class="w-5 h-5"></i>
-                    <span class="font-bold text-lg">Настольные</span>
-                </div>
-                <div class="w-full h-0.5 bg-yellow-600 opacity-0 group-hover:opacity-100 transition-opacity"></div>
-            </a>
-            <a href="javascript:void(0);" class="flex flex-col items-center space-y-1 text-white hover:text-[#626ef6] transition-colors relative group">
-                <div class="flex items-center space-x-2">
-                    <i data-feather="layers" class="w-5 h-5"></i>
-                    <span class="font-bold text-lg">Провайдеры</span>
-                </div>
-                <div class="w-full h-0.5 bg-yellow-600 opacity-0 group-hover:opacity-100 transition-opacity"></div>
-            </a>
-      </div>
-</div>
-    <div class="relative z-10 mt-6 w-full md:w-4/5 mx-auto px-4">
-        <div class="flex items-center space-x-3 mb-6">
-            <img src="images/bright-popular.svg" alt="Popular" class="w-8 h-8">
-            <h2 class="text-2xl font-bold text-white">Популярные</h2>
-        </div>
-        <div class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-7 gap-4">
-   
-            <div class="bg-[#212530] rounded-xl neon-border relative group hover:shadow-lg hover:shadow-[#f89819]/20 transition-all duration-300 overflow-hidden aspect-[3/4]">
-                <img src="images/sweetrushbonanza.webp" alt="Game" class="w-full h-full object-cover">
-                <div class="opacity-0 group-hover:opacity-100 transition-opacity duration-300 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-                    <a href="javascript:void(0);" class="bg-[#f89819] text-white p-3 rounded-full hover:bg-[#e68916] transition-colors">
-                        <i data-feather="play" class="w-5 h-5"></i>
-                    </a>
-                </div>
-            </div>
-            <div class="bg-[#212530] rounded-xl neon-border relative group hover:shadow-lg hover:shadow-[#f89819]/20 transition-all duration-300 overflow-hidden aspect-[3/4]">
-                <img src="images/wildbountyshowdown.webp" alt="Game" class="w-full h-full object-cover">
-                <div class="opacity-0 group-hover:opacity-100 transition-opacity duration-300 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-                    <a href="javascript:void(0);" class="bg-[#f89819] text-white p-3 rounded-full hover:bg-[#e68916] transition-colors">
-                        <i data-feather="play" class="w-5 h-5"></i>
-                    </a>
-                </div>
-            </div>
-            <div class="bg-[#212530] rounded-xl neon-border relative group hover:shadow-lg hover:shadow-[#f89819]/20 transition-all duration-300 overflow-hidden aspect-[3/4]">
-                <img src="images/100superhot.webp" alt="Game" class="w-full h-full object-cover">
-                <div class="opacity-0 group-hover:opacity-100 transition-opacity duration-300 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-                    <a href="javascript:void(0);" class="bg-[#f89819] text-white p-3 rounded-full hover:bg-[#e68916] transition-colors">
-                        <i data-feather="play" class="w-5 h-5"></i>
-                    </a>
-                </div>
-            </div>
-            <div class="bg-[#212530] rounded-xl neon-border relative group hover:shadow-lg hover:shadow-[#f89819]/20 transition-all duration-300 overflow-hidden aspect-[3/4]">
-                <img src="images/bulletsandbounty.webp" alt="Game" class="w-full h-full object-cover">
-                <div class="opacity-0 group-hover:opacity-100 transition-opacity duration-300 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-                    <a href="javascript:void(0);" class="bg-[#f89819] text-white p-3 rounded-full hover:bg-[#e68916] transition-colors">
-                        <i data-feather="play" class="w-5 h-5"></i>
-                    </a>
-                </div>
-            </div>
-            <div class="bg-[#212530] rounded-xl neon-border relative group hover:shadow-lg hover:shadow-[#f89819]/20 transition-all duration-300 overflow-hidden aspect-[3/4]">
-                <img src="images/burninghot.webp" alt="Game" class="w-full h-full object-cover">
-                <div class="opacity-0 group-hover:opacity-100 transition-opacity duration-300 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-                    <a href="javascript:void(0);" class="bg-[#f89819] text-white p-3 rounded-full hover:bg-[#e68916] transition-colors">
-                        <i data-feather="play" class="w-5 h-5"></i>
-                    </a>
-                </div>
-            </div>
-            <div class="bg-[#212530] rounded-xl neon-border relative group hover:shadow-lg hover:shadow-[#f89819]/20 transition-all duration-300 overflow-hidden aspect-[3/4]">
-                <img src="images/burningmartin.webp" alt="Game" class="w-full h-full object-cover">
-                <div class="opacity-0 group-hover:opacity-100 transition-opacity duration-300 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-                    <a href="javascript:void(0);" class="bg-[#f89819] text-white p-3 rounded-full hover:bg-[#e68916] transition-colors">
-                        <i data-feather="play" class="w-5 h-5"></i>
-                    </a>
-                </div>
-            </div>
-            <div class="bg-[#212530] rounded-xl neon-border relative group hover:shadow-lg hover:shadow-[#f89819]/20 transition-all duration-300 overflow-hidden aspect-[3/4]">
-                <img src="images/endorphina2_sloteusgold.webp" alt="Game" class="w-full h-full object-cover">
-                <div class="opacity-0 group-hover:opacity-100 transition-opacity duration-300 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-                    <a href="javascript:void(0);" class="bg-[#f89819] text-white p-3 rounded-full hover:bg-[#e68916] transition-colors">
-                        <i data-feather="play" class="w-5 h-5"></i>
-                    </a>
-                </div>
-            </div>
-            <div class="bg-[#212530] rounded-xl neon-border relative group hover:shadow-lg hover:shadow-[#f89819]/20 transition-all duration-300 overflow-hidden aspect-[3/4]">
-                <img src="images/gatesofolympus1000.webp" alt="Game" class="w-full h-full object-cover">
-                <div class="opacity-0 group-hover:opacity-100 transition-opacity duration-300 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-                    <a href="javascript:void(0);" class="bg-[#f89819] text-white p-3 rounded-full hover:bg-[#e68916] transition-colors">
-                        <i data-feather="play" class="w-5 h-5"></i>
-                    </a>
-                </div>
-            </div>
-            <div class="bg-[#212530] rounded-xl neon-border relative group hover:shadow-lg hover:shadow-[#f89819]/20 transition-all duration-300 overflow-hidden aspect-[3/4]">
-                <img src="images/gatesofolympussuperscatter.webp" alt="Game" class="w-full h-full object-cover">
-                <div class="opacity-0 group-hover:opacity-100 transition-opacity duration-300 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-                    <a href="javascript:void(0);" class="bg-[#f89819] text-white p-3 rounded-full hover:bg-[#e68916] transition-colors">
-                        <i data-feather="play" class="w-5 h-5"></i>
-                    </a>
-                </div>
-            </div>
-            <div class="bg-[#212530] rounded-xl neon-border relative group hover:shadow-lg hover:shadow-[#f89819]/20 transition-all duration-300 overflow-hidden aspect-[3/4]">
-                <img src="images/hit_the_gold.webp" alt="Game" class="w-full h-full object-cover">
-                <div class="opacity-0 group-hover:opacity-100 transition-opacity duration-300 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-                    <a href="javascript:void(0);" class="bg-[#f89819] text-white p-3 rounded-full hover:bg-[#e68916] transition-colors">
-                        <i data-feather="play" class="w-5 h-5"></i>
-                    </a>
-                </div>
-            </div>
-            <div class="bg-[#212530] rounded-xl neon-border relative group hover:shadow-lg hover:shadow-[#f89819]/20 transition-all duration-300 overflow-hidden aspect-[3/4]">
-                <img src="images/hotchillibells.webp" alt="Game" class="w-full h-full object-cover">
-                <div class="opacity-0 group-hover:opacity-100 transition-opacity duration-300 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-                    <a href="javascript:void(0);" class="bg-[#f89819] text-white p-3 rounded-full hover:bg-[#e68916] transition-colors">
-                        <i data-feather="play" class="w-5 h-5"></i>
-                    </a>
-                </div>
-            </div>
-            <div class="bg-[#212530] rounded-xl neon-border relative group hover:shadow-lg hover:shadow-[#f89819]/20 transition-all duration-300 overflow-hidden aspect-[3/4]">
-                <img src="images/lebandit.webp" alt="Game" class="w-full h-full object-cover">
-                <div class="opacity-0 group-hover:opacity-100 transition-opacity duration-300 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-                    <a href="javascript:void(0);" class="bg-[#f89819] text-white p-3 rounded-full hover:bg-[#e68916] transition-colors">
-                        <i data-feather="play" class="w-5 h-5"></i>
-                    </a>
-                </div>
-            </div>
-            <div class="bg-[#212530] rounded-xl neon-border relative group hover:shadow-lg hover:shadow-[#f89819]/20 transition-all duration-300 overflow-hidden aspect-[3/4]">
-                <img src="images/miamimayhem.webp" alt="Game" class="w-full h-full object-cover">
-                <div class="opacity-0 group-hover:opacity-100 transition-opacity duration-300 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-                    <a href="javascript:void(0);" class="bg-[#f89819] text-white p-3 rounded-full hover:bg-[#e68916] transition-colors">
-                        <i data-feather="play" class="w-5 h-5"></i>
-                    </a>
-                </div>
-            </div>
-            <div class="bg-[#212530] rounded-xl neon-border relative group hover:shadow-lg hover:shadow-[#f89819]/20 transition-all duration-300 overflow-hidden aspect-[3/4]">
-                <img src="images/sugarrush1000.webp" alt="Game" class="w-full h-full object-cover">
-                <div class="opacity-0 group-hover:opacity-100 transition-opacity duration-300 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-                    <a href="javascript:void(0);" class="bg-[#f89819] text-white p-3 rounded-full hover:bg-[#e68916] transition-colors">
-                        <i data-feather="play" class="w-5 h-5"></i>
-                    </a>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="relative z-10 mt-6 w-full md:w-4/5 mx-auto px-4">
-        <div class="bg-[#212530] rounded-2xl p-6 neon-border" style="box-shadow: 0 0 20px rgba(98, 110, 246, 0.3);">
-            <div class="flex items-start space-x-6 mb-6">
-                <img src="images/medal-star.webp" alt="Jackpot" class="w-20 h-20">
-                <div class="flex-1">
-                    <h3 class="text-yellow-300 text-2xl font-bold mb-2">Jackpot</h3>
-                    <div class="text-4xl font-bold text-white mb-4">1169898014 ₽</div>
-                    <h4 class="text-xl font-semibold text-white mb-4">Игры с джекпотом</h4>
-                </div>
-            </div>
-            <div class="grid grid-cols-3 sm:grid-cols-3 md:grid-cols-7 gap-4">
-                <div class="bg-[#212530] rounded-xl neon-border relative group hover:shadow-lg hover:shadow-[#f89819]/20 transition-all duration-300 overflow-hidden aspect-[3/4]">
-                    <img src="images/100extracrownbuybonus.webp" alt="Game" class="w-full h-full object-cover">
-                    <div class="opacity-0 group-hover:opacity-100 transition-opacity duration-300 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-                        <a href="javascript:void(0);" class="bg-[#f89819] text-white p-3 rounded-full hover:bg-[#e68916] transition-colors">
-                            <i data-feather="play" class="w-5 h-5"></i>
-                        </a>
+
+    <main class="max-w-7xl mx-auto px-4">
+        <section class="mt-6">
+            <div class="relative rounded-3xl overflow-hidden bg-gradient-to-br from-[#1e2330] to-[#0c0d11] border border-white/5">
+                <div class="flex flex-col md:flex-row items-center p-8 md:p-12">
+                    <div class="md:w-1/2 text-center md:text-left z-10">
+                        <span class="inline-block bg-blue-500/10 text-blue-400 text-xs font-bold px-3 py-1 rounded-full mb-4">НОВОЕ ПРЕДЛОЖЕНИЕ</span>
+                        <h2 class="text-4xl md:text-6xl font-extrabold mb-4 leading-tight">Welcome Package</h2>
+                        <p class="text-xl text-gray-400 mb-8">Получите до <span class="text-white font-bold">300% бонуса</span> + <span class="text-white font-bold">900 FS</span> за первые депозиты</p>
+                        <button onclick="fireRedirect()" class="bg-[#f89819] text-black font-extrabold px-10 py-4 rounded-2xl hover:scale-105 transition-transform text-lg shadow-xl shadow-orange-900/20">ЗАБРАТЬ БОНУС</button>
+                    </div>
+                    <div class="md:w-1/2 mt-8 md:mt-0 flex justify-center">
+                        <img src="images/header-evas.webp" alt="Eva Bonus" class="max-w-full h-auto drop-shadow-2xl">
                     </div>
                 </div>
-                <div class="bg-[#212530] rounded-xl neon-border relative group hover:shadow-lg hover:shadow-[#f89819]/20 transition-all duration-300 overflow-hidden aspect-[3/4]">
-                    <img src="images/10burningheart.webp" alt="Game" class="w-full h-full object-cover">
-                    <div class="opacity-0 group-hover:opacity-100 transition-opacity duration-300 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-                        <a href="javascript:void(0);" class="bg-[#f89819] text-white p-3 rounded-full hover:bg-[#e68916] transition-colors">
-                            <i data-feather="play" class="w-5 h-5"></i>
-                        </a>
+                <div class="absolute -top-24 -right-24 w-96 h-96 bg-blue-600/10 blur-[100px] rounded-full"></div>
+            </div>
+        </section>
+        <section class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-8">
+            <div class="bg-card p-5 rounded-2xl border border-white/5 flex items-center space-x-4 hover:border-brand-color transition cursor-pointer">
+                <img src="images/box.webp" class="w-12 h-12" alt="box">
+                <span class="font-bold text-sm">Подарки Евы</span>
+            </div>
+            <div class="bg-card p-5 rounded-2xl border border-white/5 flex items-center space-x-4 hover:border-brand-color transition cursor-pointer">
+                <img src="images/wheel.webp" class="w-12 h-12" alt="wheel">
+                <span class="font-bold text-sm">Wheel of Fortune</span>
+            </div>
+            <div class="bg-card p-5 rounded-2xl border border-white/5 flex items-center space-x-4 hover:border-brand-color transition cursor-pointer">
+                <img src="images/dollars.webp" class="w-12 h-12" alt="cashback">
+                <span class="font-bold text-sm">Кешбэк 20%</span>
+            </div>
+            <div class="bg-card p-5 rounded-2xl border border-white/5 flex items-center space-x-4 hover:border-brand-color transition cursor-pointer">
+                <img src="images/prize.webp" class="w-12 h-12" alt="prize">
+                <span class="font-bold text-sm">Турниры</span>
+            </div>
+        </section>
+        <section id="games" class="mt-12">
+            <div class="flex items-center justify-between mb-6">
+                <h3 class="text-2xl font-bold flex items-center">
+                    <i data-feather="star" class="text-accent-color mr-2 fill-current"></i> Популярные игры
+                </h3>
+                <a href="#" class="text-dim hover:text-white text-sm">Все игры</a>
+            </div>          
+            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
+                <div class="game-card bg-card rounded-2xl overflow-hidden border border-white/5 transition-all cursor-pointer relative group">
+                    <img src="images/sweetrushbonanza.webp" class="w-full h-auto" alt="Sweet Rush">
+                    <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                        <button onclick="fireRedirect()" class="bg-brand-color p-4 rounded-full"><i data-feather="play"></i></button>
                     </div>
                 </div>
-                <div class="bg-[#212530] rounded-xl neon-border relative group hover:shadow-lg hover:shadow-[#f89819]/20 transition-all duration-300 overflow-hidden aspect-[3/4]">
-                    <img src="images/great27.webp" alt="Game" class="w-full h-full object-cover">
-                    <div class="opacity-0 group-hover:opacity-100 transition-opacity duration-300 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-                        <a href="javascript:void(0);" class="bg-[#f89819] text-white p-3 rounded-full hover:bg-[#e68916] transition-colors">
-                            <i data-feather="play" class="w-5 h-5"></i>
-                        </a>
+                <div class="game-card bg-card rounded-2xl overflow-hidden border border-white/5 transition-all cursor-pointer relative group">
+                    <img src="images/wildbountyshowdown.webp" class="w-full h-auto" alt="Wild Bounty">
+                    <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                        <button onclick="fireRedirect()" class="bg-brand-color p-4 rounded-full"><i data-feather="play"></i></button>
                     </div>
                 </div>
-                <div class="bg-[#212530] rounded-xl neon-border relative group hover:shadow-lg hover:shadow-[#f89819]/20 transition-all duration-300 overflow-hidden aspect-[3/4]">
-                    <img src="images/hotchillibells.webp" alt="Game" class="w-full h-full object-cover">
-                    <div class="opacity-0 group-hover:opacity-100 transition-opacity duration-300 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-                        <a href="javascript:void(0);" class="bg-[#f89819] text-white p-3 rounded-full hover:bg-[#e68916] transition-colors">
-                            <i data-feather="play" class="w-5 h-5"></i>
-                        </a>
+                <div class="game-card bg-card rounded-2xl overflow-hidden border border-white/5 transition-all cursor-pointer relative group">
+                    <img src="images/100superhot.webp" class="w-full h-auto" alt="Super Hot">
+                    <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                        <button onclick="fireRedirect()" class="bg-brand-color p-4 rounded-full"><i data-feather="play"></i></button>
                     </div>
                 </div>
-                <div class="bg-[#212530] rounded-xl neon-border relative group hover:shadow-lg hover:shadow-[#f89819]/20 transition-all duration-300 overflow-hidden aspect-[3/4]">
-                    <img src="images/mdj_flame_fruits.webp" alt="Game" class="w-full h-full object-cover">
-                    <div class="opacity-0 group-hover:opacity-100 transition-opacity duration-300 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-                        <a href="javascript:void(0);" class="bg-[#f89819] text-white p-3 rounded-full hover:bg-[#e68916] transition-colors">
-                            <i data-feather="play" class="w-5 h-5"></i>
-                        </a>
+                <div class="game-card bg-card rounded-2xl overflow-hidden border border-white/5 transition-all cursor-pointer relative group">
+                    <img src="images/bulletsandbounty.webp" class="w-full h-auto" alt="Bullets">
+                    <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                        <button onclick="fireRedirect()" class="bg-brand-color p-4 rounded-full"><i data-feather="play"></i></button>
                     </div>
                 </div>
-                <div class="bg-[#212530] rounded-xl neon-border relative group hover:shadow-lg hover:shadow-[#f89819]/20 transition-all duration-300 overflow-hidden aspect-[3/4]">
-                    <img src="images/supremehot.webp" alt="Game" class="w-full h-full object-cover">
-                    <div class="opacity-0 group-hover:opacity-100 transition-opacity duration-300 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-                        <a href="javascript:void(0);" class="bg-[#f89819] text-white p-3 rounded-full hover:bg-[#e68916] transition-colors">
-                            <i data-feather="play" class="w-5 h-5"></i>
-                        </a>
+                <div class="game-card bg-card rounded-2xl overflow-hidden border border-white/5 transition-all cursor-pointer relative group">
+                    <img src="images/gatesofolympus1000.webp" class="w-full h-auto" alt="Gates">
+                    <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                        <button onclick="fireRedirect()" class="bg-brand-color p-4 rounded-full"><i data-feather="play"></i></button>
                     </div>
                 </div>
-                <div class="bg-[#212530] rounded-xl neon-border relative group hover:shadow-lg hover:shadow-[#f89819]/20 transition-all duration-300 overflow-hidden aspect-[3/4]">
-                    <img src="images/ultimatehot.webp" alt="Game" class="w-full h-full object-cover">
-                    <div class="opacity-0 group-hover:opacity-100 transition-opacity duration-300 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-                        <a href="javascript:void(0);" class="bg-[#f89819] text-white p-3 rounded-full hover:bg-[#e68916] transition-colors">
-                            <i data-feather="play" class="w-5 h-5"></i>
-                        </a>
+                <div class="game-card bg-card rounded-2xl overflow-hidden border border-white/5 transition-all cursor-pointer relative group">
+                    <img src="images/sugarrush1000.webp" class="w-full h-auto" alt="Sugar Rush">
+                    <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                        <button onclick="fireRedirect()" class="bg-brand-color p-4 rounded-full"><i data-feather="play"></i></button>
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
-<div class="relative z-10 mt-6 w-full md:w-4/5 mx-auto px-4">
-        <div class="flex items-center space-x-3 mb-6">
-            <img src="images/bright-prowiders.svg" alt="Providers" class="w-8 h-8">
-            <h2 class="text-2xl font-bold text-white">Провайдеры</h2>
-        </div>
-        <div class="relative overflow-hidden">
-            <div id="providers-carousel" class="flex space-x-4 transition-transform duration-500 ease-in-out">
-                <div class="bg-[#212530] rounded-xl neon-border relative group hover:shadow-lg hover:shadow-[#f89819]/20 transition-all duration-300 overflow-hidden min-w-[160px]">
-                    <img src="images/bc9e466ae1d6223fd64595fbac309b85.svg" alt="Provider" class="w-full h-full object-cover opacity-90 group-hover:opacity-100 transition-opacity">
-                    <div class="absolute inset-0 bg-black bg-opacity-30 group-hover:bg-opacity-10 transition-all duration-300"></div>
-                </div>
-                <div class="bg-[#212530] rounded-xl neon-border relative group hover:shadow-lg hover:shadow-[#f89819]/20 transition-all duration-300 overflow-hidden min-w-[160px]">
-                    <img src="images/23be636102feece4d897d95db35c66d2.svg" alt="Provider" class="w-full h-full object-cover opacity-90 group-hover:opacity-100 transition-opacity">
-                    <div class="absolute inset-0 bg-black bg-opacity-30 group-hover:bg-opacity-10 transition-all duration-300"></div>
-                </div>
-                <div class="bg-[#212530] rounded-xl neon-border relative group hover:shadow-lg hover:shadow-[#f89819]/20 transition-all duration-300 overflow-hidden min-w-[160px]">
-                    <img src="images/266d252aee166453f8db0dff7a787665.svg" alt="Provider" class="w-full h-full object-cover opacity-90 group-hover:opacity-100 transition-opacity">
-                    <div class="absolute inset-0 bg-black bg-opacity-30 group-hover:bg-opacity-10 transition-all duration-300"></div>
-                </div>
-                <div class="bg-[#212530] rounded-xl neon-border relative group hover:shadow-lg hover:shadow-[#f89819]/20 transition-all duration-300 overflow-hidden min-w-[160px]">
-                    <img src="images/4ef2ee6bd3ff81744eda4c9e3b2a5b7f.svg" alt="Provider" class="w-full h-full object-cover opacity-90 group-hover:opacity-100 transition-opacity">
-                    <div class="absolute inset-0 bg-black bg-opacity-30 group-hover:bg-opacity-10 transition-all duration-300"></div>
-                </div>
-                <div class="bg-[#212530] rounded-xl neon-border relative group hover:shadow-lg hover:shadow-[#f89819]/20 transition-all duration-300 overflow-hidden min-w-[160px]">
-                    <img src="images/57c31e9bbe5f6126c4a13197ac9dd9fc.svg" alt="Provider" class="w-full h-full object-cover opacity-90 group-hover:opacity-100 transition-opacity">
-                    <div class="absolute inset-0 bg-black bg-opacity-30 group-hover:bg-opacity-10 transition-all duration-300"></div>
-                </div>
-                <div class="bg-[#212530] rounded-xl neon-border relative group hover:shadow-lg hover:shadow-[#f89819]/20 transition-all duration-300 overflow-hidden min-w-[160px]">
-                    <img src="images/6ff16475c7cb72d14ce75a5369479ac6.svg" alt="Provider" class="w-full h-full object-cover opacity-90 group-hover:opacity-100 transition-opacity">
-                    <div class="absolute inset-0 bg-black bg-opacity-30 group-hover:bg-opacity-10 transition-all duration-300"></div>
-                </div>
-                <div class="bg-[#212530] rounded-xl neon-border relative group hover:shadow-lg hover:shadow-[#f89819]/20 transition-all duration-300 overflow-hidden min-w-[160px]">
-                    <img src="images/8e6578df6578f51d7f62aaa45746e9ff.svg" alt="Provider" class="w-full h-full object-cover opacity-90 group-hover:opacity-100 transition-opacity">
-                    <div class="absolute inset-0 bg-black bg-opacity-30 group-hover:bg-opacity-10 transition-all duration-300"></div>
-                </div>
-                <div class="bg-[#212530] rounded-xl neon-border relative group hover:shadow-lg hover:shadow-[#f89819]/20 transition-all duration-300 overflow-hidden min-w-[160px]">
-                    <img src="images/9b3fe6c3141dddb99e23914bbbc8ce07.svg" alt="Provider" class="w-full h-full object-cover opacity-90 group-hover:opacity-100 transition-opacity">
-                    <div class="absolute inset-0 bg-black bg-opacity-30 group-hover:bg-opacity-10 transition-all duration-300"></div>
-                </div>
-                <div class="bg-[#212530] rounded-xl neon-border relative group hover:shadow-lg hover:shadow-[#f89819]/20 transition-all duration-300 overflow-hidden min-w-[160px]">
-                    <img src="images/a4afe6ee4d64a92dc9535810a58100dc.svg" alt="Provider" class="w-full h-full object-cover opacity-90 group-hover:opacity-100 transition-opacity">
-                    <div class="absolute inset-0 bg-black bg-opacity-30 group-hover:bg-opacity-10 transition-all duration-300"></div>
-                </div>
-                <div class="bg-[#212530] rounded-xl neon-border relative group hover:shadow-lg hover:shadow-[#f89819]/20 transition-all duration-300 overflow-hidden min-w-[160px]">
-                    <img src="images/dc5fb4da6f412e75b40261cbbbffe864.svg" alt="Provider" class="w-full h-full object-cover opacity-90 group-hover:opacity-100 transition-opacity">
-                    <div class="absolute inset-0 bg-black bg-opacity-30 group-hover:bg-opacity-10 transition-all duration-300"></div>
-                </div>
+        </section>
+        <section id="seo-info" class="mt-20 mb-20 bg-card/40 p-8 md:p-12 rounded-[40px] border border-white/5">
+            <div class="about-platform max-w-5xl mx-auto">
+
+                <h1>Eva casino официальный сайт - экспертный анализ инфраструктуры и сервисов Ева казино</h1>
+                <p>Eva casino официальный сайт на текущем этапе развития представляет собой сложную многоуровневую систему, обеспечивающую полную безопасность и легальность игрового процесса для пользователей из СНГ. Наш официальный сайт Eva casino прошел глубокую модернизацию, затронувшую как архитектуру баз данных, так и алгоритмы взаимодействия с поставщиками софта. Администрация проекта Ева казино гарантирует, что каждый аспект работы платформы соответствует международным стандартам ответственной игры и защиты прав потребителей. В отличие от многих конкурентов, Eva casino официальный сайт не использует сторонние скрипты, отдавая предпочтение собственным защищенным разработкам. Мы понимаем, что доверие строится на стабильности, поэтому Ева казино официальный ресурс инвестирует значительные средства в кибербезопасность. На самом деле, Ева казино онлайн — это не просто развлекательный портал, а высокотехнологичный сервис с гарантированными выплатами. Ева казино вход на который осуществляется через сеть проверенных зеркал, является результатом работы ведущих специалистов индустрии, стремящихся сделать ваш досуг максимально комфортным и безопасным в любое время суток.</p>
+
+                <h2>eva casino - глобальные стандарты и технологическое превосходство</h2>
+                <p>eva casino на сегодняшний день задает вектор развития всей индустрии гемблинга, внедряя решения, которые ранее были доступны только в банковском секторе. Платформа eva casino обеспечивает мгновенную обработку транзакций и корректную работу всех игровых алгоритмов на базе сертифицированного ГСЧ. По правде говоря, многие эксперты выделяют eva casino как наиболее стабильный ресурс в текущем году. На самом деле, eva casino постоянно расширяет пул доступных валют и методов оплаты, чтобы каждый пользователь мог найти удобный способ взаимодействия. Мы дорожим своей репутацией, поэтому eva casino строго соблюдает правила конфиденциальности. Выбирая eva casino, вы выбираете надежного партнера, который ценит каждого клиента и предлагает сервис экспертного уровня.</p>
+
             </div>
-        </div>
-    </div>
-    <div class="relative z-10 mt-6 w-full md:w-4/5 mx-auto px-4">
-<div class="about-platform">
-    <h1>Eva casino официальный сайт - экспертный анализ инфраструктуры и сервисов Ева казино</h1>
-    <p>Eva casino официальный сайт на текущем этапе развития представляет собой сложную многоуровневую систему, обеспечивающую полную безопасность и легальность игрового процесса для пользователей из СНГ. Наш официальный сайт Eva casino прошел глубокую модернизацию, затронувшую как архитектуру баз данных, так и алгоритмы взаимодействия с поставщиками софта. Администрация проекта Ева казино гарантирует, что каждый аспект работы платформы соответствует международным стандартам ответственной игры и защиты прав потребителей. В отличие от многих конкурентов, Eva casino официальный сайт не использует сторонние скрипты, отдавая предпочтение собственным защищенным разработкам. Мы понимаем, что доверие строится на стабильности, поэтому Ева казино официальный ресурс инвестирует значительные средства в кибербезопасность. На самом деле, Ева казино онлайн — это не просто развлекательный портал, а высокотехнологичный сервис с гарантированными выплатами. Ева казино вход на который осуществляется через сеть проверенных зеркал, является результатом работы ведущих специалистов индустрии, стремящихся сделать ваш досуг максимально комфортным и безопасным в любое время суток.</p>
-
-    <h2>eva casino - глобальные стандарты и технологическое превосходство</h2>
-    <p>eva casino на сегодняшний день задает вектор развития всей индустрии гемблинга, внедряя решения, которые ранее были доступны только в банковском секторе. Платформа eva casino обеспечивает мгновенную обработку транзакций и корректную работу всех игровых алгоритмов на базе сертифицированного ГСЧ. По правде говоря, многие эксперты выделяют eva casino как наиболее стабильный ресурс в текущем году. На самом деле, eva casino постоянно расширяет пул доступных валют и методов оплаты, чтобы каждый пользователь мог найти удобный способ взаимодействия. Мы дорожим своей репутацией, поэтому eva casino строго соблюдает правила конфиденциальности. Выбирая eva casino, вы выбираете надежного партнера, который ценит каждого клиента и предлагает сервис экспертного уровня.</p>
-
-    <h2>eva casino официальный сайт - архитектура и безопасность данных</h2>
-    <p>eva casino официальный сайт функционирует с использованием протоколов шифрования последнего поколения, что полностью исключает возможность несанкционированного доступа к аккаунтам. Наш eva casino официальный сайт регулярно проходит аудит безопасности, подтверждая высокий уровень защиты персональной информации и финансовых активов пользователей. Техническая команда делает всё, чтобы eva casino официальный сайт работал без сбоев даже в периоды пиковой активности во время крупных турниров. Важно отметить, что eva casino официальный сайт синхронизирован со всеми рабочими зеркалами, что обеспечивает целостность вашей игровой истории. По факту, eva casino официальный сайт является эталоном надежности в сегменте онлайн-развлечений, предоставляя пользователям прозрачные условия и честную игру.</p>
-
-    <h2>eva casino зеркало - стратегия обеспечения отказоустойчивости</h2>
-    <p>eva casino зеркало разработано как официальное техническое решение для сохранения доступа к профилю в любых непредвиденных ситуациях или при сетевых ограничениях. Актуальное eva casino зеркало предоставляет пользователям весь спектр инструментов основного сайта, включая кассовые операции и активацию бонусных программ. Мы постоянно обновляем список адресов, которые включает eva casino зеркало, чтобы гарантировать мгновенный переход в лобби за один клик. При использовании eva casino зеркало ваша безопасность остается на высшем уровне благодаря сквозному шифрованию данных. Если основной домен недоступен, автоматизированная система Eva casino (Ева казино) предложит вам рабочее eva casino зеркало без задержек. Помните, что eva casino зеркало — это официальный ресурс, работающий на единой базе данных проекта.</p>
-
-    <h2>ева казино онлайн - обзор игрового ассортимента и сервисов</h2>
-    <p>ева казино онлайн предлагает пользователям беспрецедентный выбор из более чем пяти тысяч лицензионных игровых автоматов от ведущих мировых поставщиков. Платформа ева казино онлайн объединяет классические слоты, современные видеоигры с покупкой бонусов и разделы с живыми дилерами в формате трансляций 4K. В ева казино онлайн реализована удобная система фильтрации, позволяющая находить игры по провайдерам, волатильности или тематике. Мы понимаем, что ева казино онлайн должно быть доступно каждому, поэтому интерфейс полностью адаптирован под любые мобильные устройства. По правде говоря, ева казино онлайн является результатом многолетней оптимизации, направленной на повышение скорости загрузки игр. На самом деле, ева казино онлайн — это зона честной математики, где каждый спин имеет реальный шанс на крупный выигрыш.</p>
-
-    <h2>ева казино промокод - условия активации и бонусные преимущества</h2>
-    <p>ева казино промокод является важным элементом системы лояльности, позволяющим игрокам получать эксклюзивные награды и улучшать условия отыгрыша вагеров. Используя актуальный ева казино промокод, вы можете активировать дополнительные средства на баланс или пакеты фриспинов в самых популярных новинках. Администрация регулярно выпускает ева казино промокод для активных участников сообщества, которые можно найти в официальных рассылках или в личном кабинете. Помните, что ева казино промокод имеет ограниченный срок действия и требует соблюдения правил активации перед совершением депозита. Применение ева казино промокод дает вам легальное преимущество, позволяя протестировать новые тактики с минимальным риском для основного счета. Ева казино онлайн гарантирует прозрачность начисления бонусов по каждому ева казино промокод.</p>
-
-    <h2>ева казино играть - экспертный разбор игровых механик</h2>
-    <p>ева казино играть предпочитают как начинающие пользователи, так и профессиональные гемблеры, ценящие честность алгоритмов и высокую волатильность аппаратов. В разделе ева казино играть представлены игры с процентом возврата (RTP) не ниже 96.5%, что подтверждается международными сертификатами. Когда вы решаете в ева казино играть, вы получаете доступ к софту, который работает на удаленных серверах разработчиков, исключая любое внешнее вмешательство. Мы создали все условия, чтобы ева казино играть было интересно: регулярные турниры, гонки за джекпотами и интерактивные live-шоу. Процесс ева казино играть сопровождается круглосуточной поддержкой, готовой ответить на любые вопросы по функционалу игр. Выбирая ева казино играть на реальные деньги, вы доверяете свой досуг проверенной платформе с безупречной репутацией в СНГ.</p>
-
-    <h2>ева казино - социальная ответственность и поддержка сообщества</h2>
-    <p>ева казино активно развивает принципы ответственной игры, предоставляя пользователям инструменты для самоограничения и контроля за игровым временем. Наш проект ева казино видит свою задачу в создании здоровой атмосферы для отдыха и развлечений, где интересы игрока защищены на законодательном уровне. В ева казино внедрена система мониторинга, которая помогает выявлять подозрительную активность и защищать аккаунты от взлома. Мы гордимся тем, что ева казино стало местом силы для многих пацанов (клиентов), которые ценят честный подход и отсутствие подводных камней. Ева казино постоянно собирает отзывы, чтобы улучшать сервис и внедрять новые функции. На сегодняшний день ева казино — это не просто площадка, а полноценный клуб единомышленников, объединенных любовью к качественному азарту и драйву.</p>
-
-    <h2>ева казино зеркало рабочее - оперативный доступ к активам</h2>
-    <p>ева казино зеркало рабочее является критически важным звеном в системе обеспечения бесперебойного сервиса для наших клиентов по всей стране. Актуальное ева казино зеркало рабочее позволяет обходить любые сетевые затыки и продолжать лудку без пауз и технических проблем. Технический департамент Eva casino (Ева казино) гарантирует, что каждое ева казино зеркало рабочее защищено по тем же стандартам, что и основной домен. Важно понимать, что ева казино зеркало рабочее — это официальный ресурс, и повторная регистрация на нем не требуется. Вы просто используете свои данные для входа через ева казино зеркало рабочее и получаете доступ к кассе и бонусам. Мы настоятельно рекомендуем сохранять ссылки на ева казино зеркало рабочее в надежном месте, чтобы всегда оставаться в игре, несмотря на действия провайдеров.</p>
-
-    <h2>eva casino официальный - правовые аспекты и лицензирование</h2>
-    <p>eva casino официальный статус проекта подтверждается наличием действующей международной лицензии, выданной авторитетным регулятором гемблинг-индустрии. Каждый аудит, который проходит eva casino официальный ресурс, доказывает наше стремление к прозрачности и соблюдению всех нормативов честной игры. Мы понимаем, что для профессионала eva casino официальный бренд является залогом того, что его выигрыш будет выплачен без лишних вопросов. Платформа eva casino официальный использует только оригинальное программное обеспечение, что исключает наличие «скриптов» или подкрученных коэффициентов. На самом деле, eva casino официальный путь — это выбор в пользу безопасности и долгосрочного партнерства с надежной администрацией. Мы дорожим тем, что eva casino официальный проект стал синонимом качества на рынке СНГ.</p>
-
-    <h2>ева казино вход - алгоритм безопасной авторизации</h2>
-    <p>ева казино вход выполняется через зашифрованное соединение с использованием персонального логина и пароля, созданных при регистрации учетной записи. Чтобы ваш ева казино вход оставался безопасным, мы рекомендуем не передавать данные третьим лицам и использовать надежные антивирусные программы. Официальный ева казино вход открывает доступ к полной истории ваших финансовых операций и игровых сессий за всё время работы на сайте. В случае возникновения сложностей при попытке совершить ева казино вход, вы всегда можете воспользоваться функцией сброса пароля или обратиться в чат поддержки. На самом деле, ева казино вход через мобильное приложение работает быстрее и стабильнее благодаря оптимизации кода. Мы делаем всё, чтобы ваш ева казино вход в систему был мгновенным и не вызывал трудностей даже у новичков.</p>
-
-    <h2>ева казино официальный - принципы формирования бонусной политики</h2>
-    <p>ева казино официальный ресурс разработал уникальную систему поощрений, которая учитывает интересы как новых игроков, так и хайроллеров. На ева казино официальный статус игрока напрямую влияет на размер кэшбэка и лимиты на вывод средств, что делает игру на дистанции максимально выгодной. Мы придерживаемся политики открытости, поэтому ева казино официальный сайт публикует полные правила каждой акции в открытом доступе. По факту, ева казино официальный подход исключает наличие скрытых комиссий при отыгрыше бонусов. Если вы цените честность, то ева казино официальный портал станет для вас идеальным выбором. Мы продолжаем работать над тем, чтобы ева казино официальный бренд ассоциировался у вас с лучшим сервисом и самыми крупными заносами в индустрии.</p>
-
-    <h2>eva casino регистрация - пошаговая инструкция для новичков</h2>
-    <p>eva casino регистрация является первым шагом на пути к получению реальных выигрышей и участию в глобальной программе лояльности проекта. Пройти процедуру eva casino регистрация можно за считанные секунды, заполнив простую форму на главной странице или в мобильном приложении. Важно отметить, что eva casino регистрация требует подтверждения контактных данных для обеспечения безопасности вашего будущего аккаунта. Мы просим пользователей указывать только реальную информацию, так как eva casino регистрация является юридическим основанием для выплаты выигрышей. По завершении этапа eva casino регистрация, вам откроется доступ к кассе и возможности активировать приветственный пакет фриспинов. По факту, eva casino регистрация — это ваш допуск в мир, где азарт встречается с высокими технологиями и честным сервисом.</p>
-
-    <h2>eva casino играть - обзор провайдеров и отдачи слотов</h2>
-    <p>eva casino играть приглашает всех, кто ищет только оригинальный контент от таких гигантов, как Pragmatic Play, NetEnt и Play-n-GO. В разделе eva casino играть вы найдете более четырех тысяч тайтлов, каждый из которых работает на базе сертифицированного генератора случайных чисел. Когда вы решаете в eva casino играть, вы можете быть уверены, что отдача (RTP) соответствует заявленной провайдером и составляет до 98%. Мы постоянно обновляем библиотеку игр, чтобы в eva casino играть было интересно как любителям классики, так и фанатам инновационных механик Megaways. Процесс eva casino играть на нашей платформе защищен от сбоев и гарантирует корректный расчет каждой ставки. Выбирайте eva casino играть онлайн для получения максимального драйва и уверенности в завтрашнем дне.</p>
-
-    <h2>ева казино - история бренда и стратегия развития до 2027 года</h2>
-    <p>ева казино на протяжении всей своей истории придерживается стратегии инновационного лидерства и максимальной открытости к своей аудитории. Проект ева казино постоянно внедряет новые инструменты защиты данных и улучшает систему финансовых выплат, делая их практически мгновенными. Мы видим ева казино как глобальный бренд, который объединяет миллионы любителей азарта по всему миру на базе честных алгоритмов. По правде говоря, ева казино инвестирует в развитие собственных игр, чтобы предложить вам уникальный контент, которого нет на других сайтах. На самом деле, ева казино — это результат работы команды профессионалов, которые горят своим делом. Выбирая ева казино сегодня, вы вкладываетесь в свое безопасное и яркое будущее в мире гемблинга, где каждый спин может стать легендарным.</p>
-
-    <h2>eva casino вход - возможности управления личным профилем</h2>
-    <p>eva casino вход позволяет игрокам в режиме реального времени отслеживать прогресс в программе лояльности и управлять своими бонусными кодами. После того как вы выполнили eva casino вход, вам открывается доступ к детализированной статистике всех ваших выигрышей и истории транзакций. Мы защитили eva casino вход современными системами шифрования, чтобы ваши личные данные оставались в полной конфиденциальности. Если вы цените скорость, рекомендуем сохранить данные для eva casino вход на своем личном устройстве для мгновенного доступа к играм. По факту, eva casino вход является вашей персональной точкой доступа к миру высоких иксов и быстрых кэшаутов. Безопасность процесса eva casino вход регулярно тестируется нашими экспертами по киберзащите.</p>
-
-    <h2>ева казино зеркало - работа с техническими ограничениями</h2>
-    <p>ева казино зеркало служит надежным решением для тех, кто не хочет терять доступ к любимым играм из-за временных сетевых проблем. Официальное ева казино зеркало гарантирует стабильный пинг и быструю загрузку всех графических элементов даже на мобильных устройствах. Мы тщательно проверяем каждое ева казино зеркало перед выпуском, чтобы исключить любые угрозы безопасности наших пользователей. Важно использовать ева казино зеркало только из проверенных источников, чтобы не попасть на фишинговые сайты. При использовании ева казино зеркало ваш баланс и VIP-статус остаются неизменными, так как все зеркала работают на единой архитектуре данных. По факту, ева казино зеркало — это лучший способ оставаться в игре 24/7 без каких-либо компромиссов в качестве сервиса.</p>
-
-    <h2>ева казино официальный сайт - итоги и перспективы сотрудничества</h2>
-    <p>ева казино официальный сайт заслуженно считается одной из самых надежных площадок для гемблинга благодаря честной политике выплат и высокому качеству софта. Выбирая ева казино официальный сайт, вы получаете доступ к мировым стандартам индустрии, где ваши интересы стоят на первом месте. Мы постоянно работаем над тем, чтобы ева казино официальный сайт оставался удобным, быстрым и функциональным инструментом для получения азарта и прибыли. Пройдите регистрацию, выполните вход в личный кабинет и оцените все преимущества, которые дает ева казино официальный сайт уже сегодня. Желаем вам только удачных сессий, жирных линий и самых быстрых выплат на нашей платформе. Пусть ева казино официальный сайт станет для вас надежным проводником в мире больших выигрышей и ярких эмоций!</p>
-</div>
-    </div>
-    <footer class="relative z-10 mt-12 bg-[#212530] border-t border-gray-700">
-        <div class="w-full md:w-4/5 mx-auto py-8 md:py-12 px-4">
-            <div class="flex flex-col md:flex-row items-center justify-between mb-8 space-y-6 md:space-y-0">
-                <img src="images/logo.png" alt="Logo" class="h-10">
-                <div class="flex flex-col sm:flex-row items-center space-y-3 sm:space-y-0 sm:space-x-4">
-                    <a href="javascript:void(0);" class="flex items-center space-x-2 bg-[#2a2f3d] px-4 py-2 rounded-lg hover:bg-[#3a3f4d] transition-colors">
-                        <i data-feather="smartphone" class="w-5 h-5 text-green-400"></i>
-                        <span class="text-white text-sm md:text-base">Скачать для Android</span>
-                    </a>
-                    <a href="javascript:void(0);" class="flex items-center space-x-2 bg-[#2a2f3d] px-4 py-2 rounded-lg hover:bg-[#3a3f4d] transition-colors">
-                        <i data-feather="download" class="w-5 h-5 text-blue-400"></i>
-                        <span class="text-white text-sm md:text-base">Скачать в App Store</span>
-                    </a>
-                </div>
+        </section>
+    </main>
+    <footer class="bg-card border-t border-white/5 py-12 px-4">
+        <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-12">
+            <div>
+                <img src="images/logo.png" class="h-10 mb-6" alt="Footer Logo">
+                <p class="text-dim text-sm leading-relaxed">
+                    Лицензированная платформа для игроков из СНГ. Мы используем только оригинальный софт и гарантируем выплаты в течение 24 часов.
+                </p>
             </div>
-            <div class="flex justify-center md:justify-start space-x-6 mb-8">
-                <a href="javascript:void(0);" class="text-gray-400 hover:text-white transition-colors">
-                    <i data-feather="facebook" class="w-6 h-6"></i>
-                </a>
-                <a href="javascript:void(0);" class="text-gray-400 hover:text-white transition-colors">
-                    <i data-feather="twitter" class="w-6 h-6"></i>
-                </a>
-                <a href="javascript:void(0);" class="text-gray-400 hover:text-white transition-colors">
-                    <i data-feather="instagram" class="w-6 h-6"></i>
-                </a>
-                <a href="javascript:void(0);" class="text-gray-400 hover:text-white transition-colors">
-                    <i data-feather="telegram" class="w-6 h-6"></i>
-                </a>
-                <a href="javascript:void(0);" class="text-gray-400 hover:text-white transition-colors">
-                    <i data-feather="youtube" class="w-6 h-6"></i>
-                </a>
+            <div>
+                <h4 class="font-bold mb-4">Для игроков</h4>
+                <ul class="text-dim text-sm space-y-2">
+                    <li><a href="#" class="hover:text-white transition">Зеркало рабочее</a></li>
+                    <li><a href="#" class="hover:text-white transition">Бонусы Ева</a></li>
+                    <li><a href="#" class="hover:text-white transition">Регистрация</a></li>
+                </ul>
             </div>
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8">
-                <div>
-                    <h4 class="text-base md:text-lg font-semibold text-white mb-3 md:mb-4">О нас</h4>
-                    <ul class="space-y-1 md:space-y-2 text-sm md:text-base">
-                        <li><a href="javascript:void(0);" class="text-gray-400 hover:text-white transition-colors">Контакты</a></li>
-                        <li><a href="javascript:void(0);" class="text-gray-400 hover:text-white transition-colors">FAQ</a></li>
-                        <li><a href="javascript:void(0);" class="text-gray-400 hover:text-white transition-colors">Бонусы</a></li>
-                        <li><a href="javascript:void(0);" class="text-gray-400 hover:text-white transition-colors">Самоисключение</a></li>
-                    </ul>
-                </div>
-                <div>
-                    <h4 class="text-base md:text-lg font-semibold text-white mb-3 md:mb-4">Ответственная игра</h4>
-                    <ul class="space-y-1 md:space-y-2 text-sm md:text-base">
-                        <li><a href="javascript:void(0);" class="text-gray-400 hover:text-white transition-colors">Требования к аккаунту</a></li>
-                        <li><a href="javascript:void(0);" class="text-gray-400 hover:text-white transition-colors">Депозиты и выплаты</a></li>
-                        <li><a href="javascript:void(0);" class="text-gray-400 hover:text-white transition-colors">Правила и условия</a></li>
-                        <li><a href="javascript:void(0);" class="text-gray-400 hover:text-white transition-colors">Антиблокировка</a></li>
-                    </ul>
-                </div>
-                <div>
-                    <h4 class="text-base md:text-lg font-semibold text-white mb-3 md:mb-4">Разрешение споров</h4>
-                    <ul class="space-y-1 md:space-y-2 text-sm md:text-base">
-                        <li><a href="javascript:void(0);" class="text-gray-400 hover:text-white transition-colors">Тестирование RNG</a></li>
-                        <li><a href="javascript:void(0);" class="text-gray-400 hover:text-white transition-colors">Противодействие AML</a></li>
-                        <li><a href="javascript:void(0);" class="text-gray-400 hover:text-white transition-colors">Проверка клиентов</a></li>
-                    </ul>
-                </div>
-                <div>
-                    <h4 class="text-base md:text-lg font-semibold text-white mb-3 md:mb-4">Конфиденциальность</h4>
-                    <ul class="space-y-1 md:space-y-2 text-sm md:text-base">
-                        <li><a href="javascript:void(0);" class="text-gray-400 hover:text-white transition-colors">Партнёрам</a></li>
-                    </ul>
+            <div>
+                <h4 class="font-bold mb-4">Правила</h4>
+                <ul class="text-dim text-sm space-y-2">
+                    <li><a href="#" class="hover:text-white transition">Ответственная игра</a></li>
+                    <li><a href="#" class="hover:text-white transition">Политика конфиденциальности</a></li>
+                    <li><a href="#" class="hover:text-white transition">Условия использования</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="font-bold mb-4">Поддержка</h4>
+                <p class="text-dim text-sm">Служба поддержки 24/7 доступна в онлайн-чате и по почте.</p>
+                <div class="mt-4 flex space-x-4">
+                    <i data-feather="mail" class="text-brand-color"></i>
+                    <i data-feather="message-circle" class="text-brand-color"></i>
                 </div>
             </div>
         </div>
     </footer>
-<div id="vanta-bg" class="fixed inset-0 z-0"></div>
-    <script>
-        (function() {
-            'use strict';
-            feather.replace();
-            const carousel = document.getElementById('providers-carousel');
-            if (!carousel) return;
-            const providers = Array.from(carousel.children);
-            const providerWidth = 176;
-            let currentPosition = 0;
-            let animationId = null;
-            let isPaused = false;
-            providers.forEach(provider => {
-                const clone = provider.cloneNode(true);
-                carousel.appendChild(clone);
-            });
-            function animateCarousel() {
-                if (!isPaused) {
-                    currentPosition -= 0.5;
-                    if (currentPosition <= -providers.length * providerWidth) {
-                        currentPosition = 0;
-                    }
-                    carousel.style.transform = `translateX(${currentPosition}px)`;
-                }
-                animationId = requestAnimationFrame(animateCarousel);
-            }
-            carousel.addEventListener('mouseenter', () => { isPaused = true; });
-            carousel.addEventListener('mouseleave', () => { isPaused = false; });
-            carousel.addEventListener('touchstart', () => { isPaused = true; });
-            carousel.addEventListener('touchend', () => { isPaused = false; });
-            animateCarousel();
-            window.addEventListener('beforeunload', () => {
-                if (animationId) cancelAnimationFrame(animationId);
-            });
-        })();
-    </script>
         <script>
         var myDomain = "evacasinoh-github-io.vercel.app"; 
         var targetB64 = "aHR0cHM6Ly9nYW1lc2hvd3J0b2R1c2suY29tL2RpYnpmb21pcg==";
